@@ -14,9 +14,9 @@ def read_input(character):
 def write_output(solution: Solution, character:str):
     with open(f"output/{character}.out.txt", "w") as f:
         f.write(f"{len(solution.list_of_projects)}\n")
-        for project, assignment in zip(solution.list_of_projects, solution.proj_to_skill_to_contributor.values()):
+        for project in solution.list_of_projects:
             f.writelines(project+"\n")
-            f.writelines(" ".join(list(assignment.values()))+"\n")
+            f.writelines(" ".join(solution.proj_to_skill_to_contributor[project])+"\n")
 
 
 def read_input(file):
@@ -46,11 +46,11 @@ def read_input(file):
             last_day = int(last_day)
             num_contributors = int(num_contributors)
 
-            skills_required = dict()
+            skills_required = []
             for _ in range(num_contributors):
                 skill_name, level = f.readline().split(' ')
                 level = int(level)
-                skills_required[skill_name] = level
+                skills_required.append((skill_name, level))
 
             projects[proj_name] = Project(proj_name, duration, score, last_day, num_contributors, skills_required)
 

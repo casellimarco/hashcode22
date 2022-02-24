@@ -60,7 +60,7 @@ def method_3(contributors, projects):
     solution = Solution()
     new_projects = []
     projects = list(projects.values())
-    projects.sort(key=lambda x: sum(x.skills_required.values()))
+    projects.sort(key=lambda x: sum([v[1] for v in x.skills_required]))
     counter = 0
     while projects and counter < 10:
         for proj in projects:
@@ -68,14 +68,14 @@ def method_3(contributors, projects):
             random_contributors = list(contributors.values())
             random.shuffle(random_contributors)
             for assignment in all_possible_assignments(proj, random_contributors, max_tries=10):
-                new_assignment = {skill_name: contributor.name for skill_name, contributor in assignment.items()}
+                new_assignment = [c.name for c in assignment]
                 continue
             if new_assignment is not None:
                 solution.list_of_projects.append(proj.name)
                 solution.proj_to_skill_to_contributor[proj.name] = new_assignment
                 # mentoring
-                for skill, contributor in assignment.items():
-                    contributor.improve(skill, proj.skills_required[skill])
+                for i, contributor in enumerate(assignment):
+                    contributor.improve(*proj.skills_required[i])
             else:
                 new_projects.append(proj)
         counter += 1

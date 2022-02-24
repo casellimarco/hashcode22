@@ -21,7 +21,7 @@ class Project:
     score: int
     last_day: int
     num_contributors: int
-    skills_required: dict
+    skills_required: list
 
 @dataclass
 class Solution:
@@ -33,11 +33,8 @@ def all_possible_assignments(project: Project, contributors: t.List[Contributor]
     tries = 0
     for subset in combinations(contributors, project.num_contributors):
         for permutation in permutations(subset):
-            possible_assignment = dict()
-            for skill, contributor in zip(project.skills_required.keys(), permutation):
-                possible_assignment[skill] = contributor
-            if is_valid_assignment(project, possible_assignment):
-                yield possible_assignment
+            if is_valid_assignment(project, permutation):
+                yield permutation
             tries+=1
             if tries >= max_tries:
                 break
@@ -48,27 +45,25 @@ def all_possible_assignments(project: Project, contributors: t.List[Contributor]
 
 def is_valid_assignment(
     constraints: Project,
-    assignments: t.Dict[str, Contributor]
+    assignments: t.List[Contributor]
 ) -> bool:
 
-    if constraints.skills_required.keys() != assignments.keys():
+    if len(constraints.skills_required) != len(assignments):
         False
     
-    mentoring = set()
+    mentoring = []
 
-    for skill_name, contributor in assignments.items():
-        # Get the level from the constraints
-        required_level = constraints.skills_required[skill_name]
-        contributor_level = contributor.skills[skill_name]
+    for i, (skill_name, required_level) in enumerate(constraints.skills_required):
+        contributor_level = assignments[i].skills[skill_name]
         if contributor_level == required_level - 1:
-            mentoring.add(skill_name)
+            mentoring.append((skill_name, required_level))
+            
         elif contributor_level < required_level:
             return False
     
-    for skill_name in mentoring:
-        required_level = constraints.skills_required[skill_name]
+    for skill_name, required_level in mentoring:
         found = False
-        for contributor in assignments.values():
+        for contributor in assignments:
             contributor_level = contributor.skills[skill_name]
             if contributor_level >= required_level:
                 found = True
