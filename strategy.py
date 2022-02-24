@@ -53,7 +53,9 @@ def method_2(contributors, projects):
         new_projects = []
     
     return solution
-        
+
+import random
+
 def method_3(contributors, projects):
     solution = Solution()
     new_projects = []
@@ -63,8 +65,9 @@ def method_3(contributors, projects):
     while projects and counter < 10:
         for proj in projects:
             new_assignment = None
-
-            for assignment in all_possible_assignments(proj, list(contributors.values()), max_tries=10):
+            random_contributors = list(contributors.values())
+            random.shuffle(random_contributors)
+            for assignment in all_possible_assignments(proj, random_contributors, max_tries=10):
                 new_assignment = {skill_name: contributor.name for skill_name, contributor in assignment.items()}
                 continue
             if new_assignment is not None:
