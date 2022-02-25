@@ -22,11 +22,14 @@ class Project:
     last_day: int
     num_contributors: int
     skills_required: list
+    
+    def get_score(self, day:int) -> int:
+        return max(self.score - max(day - self.last_day, 0), 0)
 
 @dataclass
 class Solution:
     list_of_projects: list = field(default_factory=list)
-    proj_to_skill_to_contributor: dict = field(default_factory=dict)
+    proj_to_contr: dict = field(default_factory=dict)
 
 
 def all_possible_assignments(project: Project, contributors: t.List[Contributor], max_tries:int=100):

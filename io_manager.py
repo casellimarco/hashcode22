@@ -16,7 +16,7 @@ def write_output(solution: Solution, character:str):
         f.write(f"{len(solution.list_of_projects)}\n")
         for project in solution.list_of_projects:
             f.writelines(project+"\n")
-            f.writelines(" ".join(solution.proj_to_skill_to_contributor[project])+"\n")
+            f.writelines(" ".join(solution.proj_to_contr[project])+"\n")
 
 
 def read_input(file):

@@ -9,8 +9,8 @@ for char in "abcdef":
     print(f"Num projects: {len(projects)}")
 
     result = method(contributors, projects)
-    # score = get_score(result, projects, contributors)
-    # print(f"Case {char}: {score} score \n")
+    score = get_score(result, projects, contributors)
+    print(f"Case {char}: {score} score \n")
     print(char)
 
     write_output(result, char)
